@@ -6,13 +6,7 @@ class Animal {
   constructor(name) {
     this.name = name;
     this.health = 100;
-    this.hidden = false;
-
     Animal.alive.push(this);
-  }
-
-  die() {
-    Animal.alive = Animal.alive.filter((animal) => animal !== this);
   }
 }
 
@@ -22,24 +16,21 @@ class Herbivore extends Animal {
     this.hidden = false;
   }
 
-  hidden() {
+  hide() {
     this.hidden = true;
   }
 }
 
 class Carnivore extends Animal {
+  // eslint-disable-next-line no-useless-constructor
   constructor(name) {
     super(name);
   }
 
   bite(victim) {
-    if (victim instanceof Carnivore || victim.hidden) {
-      return;
-    }
-
-    victim.health -= 50;
-    if (victim.health <= 0) {
-      victim.die();
+    if (victim instanceof Herbivore && !victim.hidden) {
+      victim.health -= 50;
+      Animal.alive = Animal.alive.filter((a) => a.health > 0);
     }
   }
 }
